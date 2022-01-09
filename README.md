@@ -14,7 +14,7 @@
     使用目录：/Users/env/
     ```
     
-    - macOS Linux
+    - Linux 系统
     ```text
     使用目录：/env/
     ```
