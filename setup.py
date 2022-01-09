@@ -13,7 +13,7 @@ with open("README.md", "r", encoding='utf-8') as fh:
 
 setuptools.setup(
     name="envx",
-    version="0.0.1",
+    version="0.0.2",
     author="ZeroSeeker",
     author_email="zeroseeker@foxmail.com",
     description="make it easy to use env",
@@ -26,5 +26,5 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    # install_requires=['colorama==0.4.4']
+    # install_requires=[]  # 额外的依赖，例如：colorama==0.4.4
 )
