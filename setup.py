@@ -22,7 +22,7 @@ setuptools.setup(
     url="https://gitee.com/ZeroSeeker/envx",
     packages=setuptools.find_packages(),
     classifiers=[
-        "Programming Language :: Python :: 3.8.6",
+        "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
