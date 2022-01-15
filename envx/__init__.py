@@ -76,7 +76,7 @@ def read(
     env_file_list = os.listdir(env_path)
     for each_env_file in env_file_list:
         if file_name_lower == each_env_file.lower():
-            env_file_dir = '%s%s' % (env_path, file_name_lower)
+            env_file_dir = '%s%s' % (env_path, each_env_file)
             f = open(env_file_dir, encoding='utf-8')
             file_read = f.read()
             lines = file_read.split('\n')
