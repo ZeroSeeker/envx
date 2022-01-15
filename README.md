@@ -52,3 +52,5 @@ pip install envx -i https://mirrors.aliyun.com/pypi/simple
 import envx
 redis_env = envx.read('redis.env')
 ```
+
+2.  文件名区分大小写

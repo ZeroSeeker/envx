@@ -7,6 +7,7 @@
 @ Gitee : https://gitee.com/ZeroSeeker
 """
 import platform
+import os
 
 
 def basic(
@@ -69,15 +70,22 @@ def read(
             /env/
     """
     env_dict = dict()
+    file_name_lower = file_name.lower()
     basic_info = basic(file_name=file_name)
-    file_dir = basic_info['file_dir']
-    f = open(file_dir, encoding='utf-8')
-    file_read = f.read()
-    lines = file_read.split('\n')
-    for each_line in lines:
-        if '=' in each_line:
-            each_line_split = each_line.split('=')
-            env_dict[each_line_split[0]] = each_line_split[1]
+    env_path = basic_info['env_path']
+    env_file_list = os.listdir(env_path)
+    for each_env_file in env_file_list:
+        if file_name_lower == each_env_file.lower():
+            env_file_dir = '%s%s' % (env_path, file_name_lower)
+            f = open(env_file_dir, encoding='utf-8')
+            file_read = f.read()
+            lines = file_read.split('\n')
+            for each_line in lines:
+                if '=' in each_line:
+                    each_line_split = each_line.split('=')
+                    env_dict[each_line_split[0]] = each_line_split[1]
+                else:
+                    pass
+            return env_dict
         else:
-            pass
-    return env_dict
+            continue
