@@ -82,7 +82,7 @@ def read(
             lines = file_read.split('\n')
             for each_line in lines:
                 if '=' in each_line:
-                    each_line_split = each_line.split('=')
+                    each_line_split = each_line.split(sep='=', maxsplit=1)  # 只拆分一次，防止有多个=影响
                     env_dict[each_line_split[0]] = each_line_split[1]
                 else:
                     pass
