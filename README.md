@@ -2,6 +2,9 @@
 ![](https://img.shields.io/badge/Python-3.8.6-green.svg)
 
 #### 介绍
+最新版本见：lazysdk.lazyenv
+项目地址：https://pypi.org/project/lazysdk/
+
 环境信息的管理模块
 - 使用目录
     - Windows 系统

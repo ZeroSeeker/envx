@@ -13,10 +13,10 @@ with open("README.md", "r", encoding='utf-8') as fh:
 
 setuptools.setup(
     name="envx",
-    version="0.0.5",
+    version="0.0.6",
     author="ZeroSeeker",
     author_email="zeroseeker@foxmail.com",
-    description="make it easy to use env",
+    description="new: https://pypi.org/project/lazysdk/ lazysdk.lazyenv",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://gitee.com/ZeroSeeker/envx",
