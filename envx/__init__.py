@@ -10,11 +10,13 @@ import platform
 import os
 
 
-def basic(
+def make_env_dir(
         file_name: str
 ):
-    inner_file_name = file_name.lower()
-
+    """
+    根据环境生成默认的环境文件路径
+    """
+    inner_file_name = file_name.lower()  # 不区分大小写
     if platform.system() == 'Windows':  # Windows
         basic_return = {
             'sys_support': True,
@@ -39,7 +41,7 @@ def basic(
             'file_dir': '/env/%s' % inner_file_name
         }
         return basic_return
-    else:
+    else:  # unknown
         basic_return = {
             'sys_support': False,
             'path_separator': '',
@@ -49,14 +51,38 @@ def basic(
         return basic_return
 
 
-def read(
-        file_name: str
+def read_env_file(
+        env_file_dir: str,
+        line_split: str = '\n',
+        key_split: str = '='
 ):
     """
-    file_name:环境文件名称，包括后缀名，不区分，例如：
-        mysql.env
-        mongo.env
-        redis.env
+    读取并处理具体的文件内容
+    """
+    env_dict = dict()
+    f = open(env_file_dir, encoding='utf-8')
+    file_read = f.read()
+    lines = file_read.split(line_split)  # 按行拆分
+    for each_line in lines:
+        if key_split in each_line:
+            each_line_split = each_line.split(sep=key_split, maxsplit=1)  # 对每行按拆分符号拆分且只拆分一次，防止有多个拆分符影响
+            env_dict[each_line_split[0]] = each_line_split[1]  # 组装结果
+        else:
+            continue
+    return env_dict
+
+
+def read(
+        file_name: str = None,
+        file_dir: str = None,
+        line_split: str = '\n',
+        key_split: str = '='
+):
+    """
+    :param file_name: 环境文件名，不区分大小写，例如：mysql.env、mongo.env、redis.env，其路径将使用默认路径
+    :param file_dir: 环境文件绝对路径，例如：/env/mysql.env
+    :param line_split: 行拆分依据，默认为\n（换行）
+    :param key_split: 关键字拆分依据，默认为=
 
     环境文件的内容是以航区分，以=符号指定，例如：HOST=192.168.0.1
     读取的结果是一个dict，将原来的行按照=符号组成键值对，例如：{"HOST": "192.168.0.1"}
@@ -69,23 +95,43 @@ def read(
         Linux:
             /env/
     """
-    env_dict = dict()
+
     file_name_lower = file_name.lower()
-    basic_info = basic(file_name=file_name)
-    env_path = basic_info['env_path']
-    env_file_list = os.listdir(env_path)
-    for each_env_file in env_file_list:
-        if file_name_lower == each_env_file.lower():
-            env_file_dir = '%s%s' % (env_path, each_env_file)
-            f = open(env_file_dir, encoding='utf-8')
-            file_read = f.read()
-            lines = file_read.split('\n')
-            for each_line in lines:
-                if '=' in each_line:
-                    each_line_split = each_line.split(sep='=', maxsplit=1)  # 只拆分一次，防止有多个=影响
-                    env_dict[each_line_split[0]] = each_line_split[1]
-                else:
-                    pass
-            return env_dict
-        else:
-            continue
+    make_env_dir_res = make_env_dir(file_name=file_name)
+    if file_dir:
+        # 如果输入的详细的文件路径，就直接读取文件
+        return read_env_file(
+            env_file_dir=file_dir,
+            line_split=line_split,
+            key_split=key_split
+        )
+    elif file_name:
+        # 如果输入的是相对文件名，则按照默认规则读取
+        env_path = make_env_dir_res['env_path']
+        env_file_list = os.listdir(env_path)
+        for each_env_file in env_file_list:
+            if file_name_lower == each_env_file.lower():
+                env_file_dir = '%s%s' % (env_path, each_env_file)
+                return read_env_file(
+                    env_file_dir=env_file_dir,
+                    line_split=line_split,
+                    key_split=key_split
+                )
+            else:
+                continue
+    else:
+        # 如果都未输入，则不读取
+        return {}
+
+
+def get_default_env():
+    """
+    读取默认环境信息
+    存在返回：{'ENV': 'DEV', 'MSG': '开发环境'}
+    不存在返回：{'ENV': None, 'MSG': None}
+    """
+    default_env = read(file_name='DEFAULT_ENV.env')
+    if default_env is None:
+        return {'ENV': None, 'MSG': None}
+    else:
+        return default_env

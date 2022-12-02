@@ -2,8 +2,6 @@
 ![](https://img.shields.io/badge/Python-3.8.6-green.svg)
 
 #### 介绍
-最新版本见：lazysdk.lazyenv
-项目地址：https://pypi.org/project/lazysdk/
 
 环境信息的管理模块
 - 使用目录
@@ -41,11 +39,12 @@ PORT=6379
 
 1.  pip安装
 ```shell script
-pip install envx
+pip3 install envx
 ```
+
 2.  pip安装（使用淘宝镜像加速）
 ```shell script
-pip install envx -i https://mirrors.aliyun.com/pypi/simple
+pip3 install envx -i https://mirrors.aliyun.com/pypi/simple
 ```
 
 #### 使用说明
@@ -56,4 +55,25 @@ import envx
 redis_env = envx.read('redis.env')
 ```
 
-2.  文件名区分大小写
+2.  DEFAULT_ENV.env
+- 一般用来描述当前的环境信息，可以用来标记当前的环境类型
+
+- 开发环境
+```text
+ENV=DEV
+MSG=开发环境
+```
+
+- 测试环境
+```text
+ENV=TEST
+MSG=测试环境
+```
+
+- 开发环境
+```text
+ENV=PROD
+MSG=生产环境
+```
+
+2.  缺省详细路径的文件名不区分大小写
