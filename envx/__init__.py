@@ -6,6 +6,7 @@
 @ GitHub : https://github.com/ZeroSeeker
 @ Gitee : https://gitee.com/ZeroSeeker
 """
+import configparser
 import platform
 import os
 
@@ -14,7 +15,9 @@ def make_env_dir(
         file_name: str
 ):
     """
-    根据环境生成默认的环境文件路径
+    根据环境生成默认的环境文件路径信息，返回一个dict,其中file_dir为环境文件的绝对路径
+    此处为固定预设路径
+    :param file_name: 需要读取的环境文件名
     """
     inner_file_name = file_name.lower()  # 不区分大小写
     if platform.system() == 'Windows':  # Windows
@@ -57,7 +60,10 @@ def read_env_file(
         key_split: str = '='
 ):
     """
-    读取并处理具体的文件内容
+    读取并处理环境文件的内容为dict，这里输入的是文件的绝对路径
+    :param env_file_dir: 需要读取的环境文件绝对路径
+    :param line_split: 换行字符
+    :param key_split: 键值区分字符
     """
     env_dict = dict()
     f = open(env_file_dir, encoding='utf-8')
@@ -79,13 +85,11 @@ def read(
         key_split: str = '='
 ):
     """
+    环境文件的内容是以行区分，以=拆分键值对，例如：HOST=192.168.0.1，读取的结果是一个dict，将原来的行按照=符号组成键值对，例如：{"HOST": "192.168.0.1"}
     :param file_name: 环境文件名，不区分大小写，例如：mysql.env、mongo.env、redis.env，其路径将使用默认路径
-    :param file_dir: 环境文件绝对路径，例如：/env/mysql.env
+    :param file_dir: 环境文件绝对路径，例如：/env/mysql.env，如果指定，将优先使用
     :param line_split: 行拆分依据，默认为\n（换行）
     :param key_split: 关键字拆分依据，默认为=
-
-    环境文件的内容是以航区分，以=符号指定，例如：HOST=192.168.0.1
-    读取的结果是一个dict，将原来的行按照=符号组成键值对，例如：{"HOST": "192.168.0.1"}
 
     环境文件路径支持：
         Windows：
@@ -95,7 +99,6 @@ def read(
         Linux:
             /env/
     """
-
     file_name_lower = file_name.lower()
     make_env_dir_res = make_env_dir(file_name=file_name)
     if file_dir:
