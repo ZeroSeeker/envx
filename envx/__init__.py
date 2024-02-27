@@ -138,3 +138,43 @@ def get_default_env():
         return {'ENV': None, 'MSG': None}
     else:
         return default_env
+
+
+def write(
+        file_name: str,
+        content: dict,
+        file_dir: str = None,
+        line_split: str = '\n',
+        key_split: str = '=',
+        overwrite: bool = False
+):
+    """
+    写入环境文件，如果文件不存在，则创建文件，如果文件存在，则根据overwrite参数决定是否覆盖
+    :param file_name: 环境文件名，不区分大小写，例如：mysql.env、mongo.env、redis.env，其路径将使用默认路径
+    :param content: 需要写入的字典，例如：{"HOST": "192.168.0.1"}
+    :param file_dir: 环境文件绝对路径，例如：
+    :param line_split: 换行符号
+    :param key_split: 键值对分字符
+    :param overwrite: 是否覆盖
+    创建成功就返回路径，创建失败就返回None
+    """
+    file_name_lower = file_name.lower()
+    make_env_dir_res = make_env_dir(file_name=file_name_lower)
+    if file_dir:
+        # 存在指定的绝对路径，将优先使用
+        env_file_dir = file_dir
+    else:
+        env_file_dir = os.path.join(make_env_dir_res['env_path'], file_name_lower)
+    print('env_file_dir', env_file_dir)
+    if os.path.exists(env_file_dir) and overwrite:
+        # 文件存在且覆盖，将删除原来的文件
+        os.remove(env_file_dir)
+    elif os.path.exists(env_file_dir) and not overwrite:
+        # 文件存在，不覆盖，直接返回
+        return
+    else:
+        pass
+    f = open(env_file_dir, 'w', encoding='utf-8')
+    f.write(line_split.join([key_split.join([key, value]) for key, value in content.items()]))
+    f.close()
+    return env_file_dir

@@ -13,7 +13,7 @@ with open("README.md", "r", encoding='utf-8') as fh:
 
 setuptools.setup(
     name="envx",
-    version="1.0.1",
+    version="1.0.2",
     author="ZeroSeeker",
     author_email="zeroseeker@foxmail.com",
     description="便捷的环境文件读取",
